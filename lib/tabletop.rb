@@ -2,7 +2,7 @@ class Tabletop
   attr_accessor :placements
 
   def initialize(size)
-    @placements = size.times.map { [:empty].cycle.take(size) }
+    @placements = size.times.map { [:empty] * size }
   end
 
   def move(robot, x, y)
