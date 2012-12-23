@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+Dir[File.expand_path('../../lib/*.rb', __FILE__)].each { |lib| require lib }
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "\nUsage: the_robot_simulator <file>\n\nYou can use flags as such:"
+
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+
+  if ARGV.size < 1
+    puts opts
+    exit
+  end
+end
+optparse.parse!
+
+begin
+  file = File.new(ARGV.first).read
+
+  tabletop = Tabletop.new(5)
+  robot = Robot.new(tabletop)
+
+  puts "Input:"
+  puts "#{file}\n"
+
+  commands = file.split("\n")
+  commands.each do |command|
+    if command != 'REPORT'
+      robot.execute(command)
+    else
+      puts "Output:"
+      puts robot.execute(command)
+    end
+  end
+
+rescue Exception => exception
+  puts exception
+  puts optparse
+end
